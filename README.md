@@ -21,7 +21,3 @@ Testne množice bomo pridobili s pomočjo naslednjih virov:
 4. https://www.historicmysteries.com/suicide-notes/ .
 
 Lažna pisma bomo sestavili sami.
-
-
-
-<u>Rezerva</u>: Natural Language Processing to the Rescue? Extracting “Situational Awareness” Tweets During Mass Emergency [https://pdfs.semanticscholar.org/7867/159013a9c10661fbfe8619a9c1cc76c3012c.pdf].
