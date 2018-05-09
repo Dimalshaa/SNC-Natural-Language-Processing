@@ -24,7 +24,7 @@ Lažna pisma bomo sestavili sami.
 
 
 
-##Implementacija
+## Implementacija
 
 ### Parts-Of-Speech
 Uporabljene nestandardne knjižnice: 
@@ -75,14 +75,5 @@ Dodana je tudi podpora za več nitno delovanje. Uporablja se isto, kot `PartsOfS
 pos = PartsOfSpeechTagger()
 pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 ```
-
-
-
-
-
-
-
-
-
 
 
