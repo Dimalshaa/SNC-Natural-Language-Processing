@@ -77,3 +77,20 @@ pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 ```
 
 
+### Feature selection
+Uporabljene nestandardne knjižnice:
+
+1. sklearn [http://scikit-learn.org/stable/modules/classes.html]
+
+Skripta podpira obdelavo korpusov v <u>.txt</u> formatu. Funkcija `buildCorpus` kot parameter sprejme pot enega direktorija ali več direktorijev v array-u npr.: `.\completeres` ali `[.\completers, .\elictors]`.
+
+Primer uporabe:
+
+```python
+corpus = buildCorpus(['.\suicide-notes-database\completers', '.\suicide-notes-database\elicitors'])
+corpus = buildCorpus('.\suicide-notes-database\completers')
+```
+Spremenljivka `corpus` je tipa `list` in vsak element predstavlja celotno vsebino datoteke.
+
+
+Funkcija `bagOfWords` poskrbi za izdelavo slovarja-vocabulary kourpusa. Prav tako pa pove frekvenco besed v posameznem elementu korpusa glede na slovar.
