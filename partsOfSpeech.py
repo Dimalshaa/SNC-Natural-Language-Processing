@@ -195,11 +195,7 @@ class PartsOfSpeechReader():
 if __name__ == "__main__":
     #downloadLexicons()
     data = readFiles("./suicide-notes-database/completers/", ".//post")
-    pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
-
-    # single threaded tagger
-    #pos.partsOfSpeechTagging(data)
-    #print(len(pos.data_tagged))
+    #pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
 
     # multi threaded tagger
     #pos.partsOfSpeechTaggingMultiprocessed(data, 6)

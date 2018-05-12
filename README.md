@@ -62,7 +62,7 @@ pos.partsOfSpeechTagging(data)
 
 Rezultat:
 
-```python
+```json
 [('I', 'PRP'), ('am', 'VBP'), ('now', 'RB'), ('convinced', 'JJ'), ('that', 'IN'), ('my', 'PRP$'), ('condition', 'NN'), ('is', 'VBZ'), ('too', 'RB'), ('chronic', 'JJ'), (',', ','), ('and', 'CC'), ('therefore', 'RB'), ('a', 'DT'), ('cure', 'NN'), ('is', 'VBZ'), ('doubtful', 'JJ'), ('.', '.'), ('All', 'DT'), ('of', 'IN'), ('a', 'DT'), ('sudden', 'JJ'), ('all', 'DT'), ('will', 'MD'), ('and', 'CC'), ('determination', 'NN'), ('to', 'TO'), ('fight', 'NN'), ('has', 'VBZ'), ('left', 'VBN'), ('me', 'PRP'), ('.', '.'), ('I', 'PRP'), ('did', 'VBD'), ('desperately', 'RB'), ('want', 'VB'), ('to', 'TO'), ('get', 'VB'), ('well', 'RB'), ('.', '.'), ('But', 'CC'), ('it', 'PRP'), ('was', 'VBD'), ('not', 'RB'), ('to', 'TO'), ('be\xe2\x80\x93I', 'VB'), ('am', 'VBP'), ('defeated', 'VBN'), ('and', 'CC'), ('exhausted', 'VBN'), ('physically', 'RB'), ('and', 'CC'), ('emotionally', 'RB'), ('.', '.'), ('Try', 'VB'), ('not', 'RB'), ('to', 'TO'), ('grieve', 'VB'), ('.', '.'), ('Be', 'NNP'), ('glad', 'JJ'), ('I', 'PRP'), ('am', 'VBP'), ('at', 'IN'), ('least', 'JJS'), ('free', 'JJ'), ('from', 'IN'), ('the', 'DT'), ('miseries', 'NNS'), ('and', 'CC'), ('loneliness', 'NN'), ('I', 'PRP'), ('have', 'VBP'), ('endured', 'VBN'), ('for', 'IN'), ('so', 'RB'), ('long', 'RB'), ('.', '.')]
 ```
 
@@ -75,7 +75,53 @@ pos = PartsOfSpeechTagger()
 pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 ```
 
+
+
+#### Branje rezultatov Parts-of-Speech
+
+Za branje rezultatov, ki jih vrača `partsOfSpeechTaggingMultiprocessed`, uporabimo razred `PartsOfSpeechReader`.
+
+Primer uporabe:
+
+```python
+# reader : statistics
+pos_reader = PartsOfSpeechReader(
+    "./suicide-notes-database/parts_of_speech/",
+    "./suicide-notes-database/parts_of_speech_statistics/"
+	)
+pos_data = pos_reader.readAnalyzedData()
+pos_reader.partsOfSpeechStatistics(pos_data)
+statistics = pos_reader.getMedianStatistics()
+```
+
+Zgornja koda sešteje vse pojavitve tag-ov, parts-of-speech datotek. kot rezultat (spremenljivka `statistics`) vrne slovar povprečnih pojavitev določenih označb. Torej, koliko glagolov, ločil, samostalnikov itd., vsebuje povprečno pismo.
+
+Primer rezultatov:
+
+```json
+PRP$  :  2.07936507937
+VBG  :  1.4126984127
+VBD  :  3.19047619048
+VBN  :  1.68253968254
+POS  :  0.0634920634921
+''  :  0.015873015873
+VBP  :  4.55555555556
+WDT  :  0.206349206349
+JJ  :  4.44444444444
+
+...
+```
+
+
+
+***OPOZORILO: Obe funkciji, `partsOfSpeechTaggingMultiprocessed` in `partsOfSpeechStatistics`, ob zagonu pobrišeta vsebino podanih direktorijev!***
+
+Podrobnejši primer uporabe je prikazan v `partsOfSpeech.py` v `"__main__"`.
+
+
+
 ### Feature selection
+
 Uporabljene nestandardne knjižnice:
 
 1. sklearn [http://scikit-learn.org/stable/modules/classes.html]
