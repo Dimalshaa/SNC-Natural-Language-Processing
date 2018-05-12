@@ -116,3 +116,58 @@ Izhod:
 ```text
 	the act of taking my own life is not something that i do without a lot of thought i don't believe that people should take their own lives without deep and thoughtful reflection over a considerable period of time i do believe strongly however that the right to do so is one of the most fundamental rights anyone in a free society should have for me much of the world makes no sense but my feelings about what i am doing ring loud and clear to an inner ear and to a place where there is no self only calm love always wendy
 ```
+### Readability
+
+Nad korpusom izvede teste bralnosti teksta, po Flesch-ovi metodi in po metodi Flesch-Kincaid.
+
+Flesch metoda vrne oceno bralnosti teksta(readability score), katera je decimalno število med 0 in 100.
+
+Flesch-Kincaid metoda vrne nivo bralnosti teksta (readability grade level), katera je decimalno število med 0 in 10.
+
+Primer klica:
+
+```python
+#klic
+results=readibility_test(".", "*.txt")
+
+#iteracija med rezultati
+for result in results:
+    print "Ime datoteke "+result[0]
+    print "Flesch score "+str(result[1])
+    print "Flesch-Kincaid grade "+str(result[2])
+```
+
+Primer rezultata:
+
+```
+Ime datoteke .\1.txt
+Flesch score 69.45625
+Flesch-Kincaid grade 6.36638888889
+
+Ime datoteke .\2.txt
+Flesch score 83.8535714286
+Flesch-Kincaid grade 5.04142857143
+
+Ime datoteke .\3.txt
+Flesch score 99.0157142857
+Flesch-Kincaid grade 1.18761904762
+
+Ime datoteke .\4.txt
+Flesch score 79.4342857143
+Flesch-Kincaid grade 7.39682539683
+```
+
+
+
+Opis funkcije `readability_test`:
+
+Vhod: 
+
+- `root:str` - root direktorij za iskanje dokumentov
+- `file_pattern:string` - regex vzorec za izbiro datotek (npr. "*", "\*.txt",...)
+
+Izhod:
+
+Array generator objektov (evalvacija se zgodi komaj ob dostopanju do vrednosti - nepomembno za končnega uporabnika)
+
+`(file_path:str, flesch_readability_ease_score:num[0-100], flesch_kincaid_grade_level:num[0-10])`
