@@ -33,7 +33,6 @@ Uporabljene nestandardne knjižnice:
 
 2. NLTK [https://www.nltk.org/]
 
-   
 
 Skripta podpira obdelavo korpusov v <u>.txt</u> in <u>.xml</u> formatu. Funkcija `readFiles` kot parameter sprejme pot do direktorija iz katerega nato prebere tektovno vsebino.
 
@@ -76,4 +75,26 @@ pos = PartsOfSpeechTagger()
 pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 ```
 
+### Pre-processing
+Pripravi korpuse na nadaljno uporabo. Iz teksta odstrani ločila, številke ter vse ostale ne standardne znake. Poskrbi za pretvorbo velikih črk v male črke.
 
+Primer uporabe:
+
+```python
+    path = "./suicide-notes-database/raw/genuine/"
+    path_izhod = "./suicide-notes-database/raw/genuine-predobdelana/"
+```
+
+Za uporabo samo nastavimo spremenljivko "path" na mapo (direktorij), kjer se nahajajo vhodni korpusi za obdelavo. V spremenljivko "path_izhod" zapišemo direktorij v katerega se bodo shranili pre obdelani korpusi.
+
+Vhod:
+
+```text
+    The act of taking my own life is not something that I do without a lot of thought. I don't believe that people should take their own lives without deep and thoughtful reflection over a considerable period of time. I do believe strongly, however, that the right to do so is one of the most fundamental rights anyone in a free society should have. For me much of the world makes no sense, but my feelings about what I am doing ring loud and clear to an inner ear and to a place where there is no self, only calm. Love always, Wendy.
+```
+
+Izhod:
+
+```text
+	the act of taking my own life is not something that i do without a lot of thought i don't believe that people should take their own lives without deep and thoughtful reflection over a considerable period of time i do believe strongly however that the right to do so is one of the most fundamental rights anyone in a free society should have for me much of the world makes no sense but my feelings about what i am doing ring loud and clear to an inner ear and to a place where there is no self only calm love always wendy
+```

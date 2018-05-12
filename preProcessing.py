@@ -33,11 +33,13 @@ def popraviBesedilo(besedilo):
             izhod+=char
         elif char=="’":
             izhod+=char
+        elif char=="'":
+            izhod+=char
         
     return izhod
 
 def shraniDatoteko(path, filename, besedilo):
-    dat = path + "/" + filename   
+    dat = path + filename   
     file_out  = open(dat, 'w')
 
     file_out.write(besedilo)
@@ -47,13 +49,13 @@ def shraniDatoteko(path, filename, besedilo):
 if __name__ == "__main__":
     #path -> mapa kjer se nahajajo datoteke za obdelavo
     #path_izhod -> mapa v katero bomo shranjevali popravljene datoteke
-    path = "./suicide-notes-database/raw/genuine"
-    path_izhod = "./suicide-notes-database/raw/genuine-predobdelana"
+    path = "./suicide-notes-database/raw/genuine/"
+    path_izhod = "./suicide-notes-database/raw/genuine-predobdelana/"
     
     datoteke = zgradiListoDatotek(path)
 
     for i in range(0, len(datoteke)):
-        filename = path + '/' + datoteke[i]
+        filename = path + datoteke[i]
         besedilo = preberiDatoteko(filename)
         popravljeno_besedilo = popraviBesedilo(besedilo)
         shraniDatoteko(path_izhod, datoteke[i], popravljeno_besedilo)
