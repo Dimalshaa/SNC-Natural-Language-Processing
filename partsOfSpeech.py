@@ -2,7 +2,7 @@
 # ambiguity checking and disambiguation.
 #2. Add speech tags.
 
-import os
+import glob, os, os.path
 import lxml.etree
 import nltk 
 from multiprocessing import Process, Manager, Value
@@ -12,7 +12,6 @@ import pickle
 import codecs
 import uuid
 import ast
-#from nltk.corpus import brown
 
 """
 outputs file contents as string
@@ -68,6 +67,15 @@ def downloadLexicons():
     nltk.download('averaged_perceptron_tagger')
     nltk.download('brown')
 
+"""
+deletes all files in a given directory, with selected file extension
+"""
+def deleteFilesInDirectory(path, file_extension):
+    filelist = glob.glob(os.path.join(path, file_extension))
+    for f in filelist:
+        os.remove(f)
+    print "[deleteFilesInDirectory] Deleted ", len(filelist), " files"
+
 class PartsOfSpeechTagger:
     def __init__(self, results_folder_path):
         self.data_tagged = []
@@ -93,6 +101,8 @@ class PartsOfSpeechTagger:
         return True
 
     def partsOfSpeechTaggingMultiprocessed(self, data, number_of_processes):
+        deleteFilesInDirectory(self.results_folder_path, "*.json")
+
         data_count = 0
         for corpus in data:
             for paragraph in corpus:
@@ -145,6 +155,8 @@ class PartsOfSpeechReader():
 
     # save dictionaries of selected notes into a statistics files folder
     def partsOfSpeechStatistics(self, pos_data):
+        deleteFilesInDirectory(self.statistics_folder_path, "*.pkl")
+
         notes = pos_data
         for note in notes:
             note = ast.literal_eval(note)
@@ -194,20 +206,38 @@ class PartsOfSpeechReader():
 
 if __name__ == "__main__":
     #downloadLexicons()
+
+
+    #### LEARNING SET
+    ### COMPLETERS
     data = readFiles("./suicide-notes-database/completers/", ".//post")
-    #pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
+    pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
 
     # multi threaded tagger
-    #pos.partsOfSpeechTaggingMultiprocessed(data, 6)
+    pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 
     # reader : statistics
     pos_reader = PartsOfSpeechReader(
         "./suicide-notes-database/parts_of_speech/",
         "./suicide-notes-database/parts_of_speech_statistics/"
         )
-    #pos_data = pos_reader.readAnalyzedData()
-    #pos_reader.partsOfSpeechStatistics(pos_data)
-    statistics = pos_reader.getMedianStatistics()
+    pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
+    statistics_completers = pos_reader.getMedianStatistics()
 
+
+    ### ELICITORS
+    data = readFiles("./suicide-notes-database/elicitors/", ".//post")
+    pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
+
+    # multi threaded tagger
+    pos.partsOfSpeechTaggingMultiprocessed(data, 6)
+
+    # reader : statistics
+    pos_reader = PartsOfSpeechReader(
+        "./suicide-notes-database/parts_of_speech/",
+        "./suicide-notes-database/parts_of_speech_statistics/"
+        )
+    pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
+    statistics_elicitors = pos_reader.getMedianStatistics()
 
 
