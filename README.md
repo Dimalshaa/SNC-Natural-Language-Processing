@@ -44,7 +44,11 @@ data = readFiles("./suicide-notes-database/elicitors")
 
 Spremenljivka `data`, ki jo vrača zgoraj omenjena funkcija, je dvodimenzionalna tabela. `data[0][4]` nam, na primer, pove vsebino petega besedila v prvi datoteki izbranega direktorija. Ta oblika zapisa se pojavi samo pri obdelavi XML datotek (ker iščemo po paragrafih). Pri navadnih tekstovnih datotekah je celotna vsebina datoteke shranjena v `data[0][0]`.
 
-Funkcija `partsOfSpeechTagging` poskrbi za tokenizacijo in označevanje besed glede na pomen v povedi. Za celoten seznam in pomene določenih označb si poglejte: https://pythonprogramming.net/natural-language-toolkit-nltk-part-speech-tagging. 
+Funkcija `partsOfSpeechTaggingMultiprocessed` poskrbi za tokenizacijo in označevanje besed glede na pomen v povedi. Dodana je tudi podpora za več nitno delovanje. Za celoten seznam in pomene določenih označb si poglejte: https://pythonprogramming.net/natural-language-toolkit-nltk-part-speech-tagging. 
+
+Uporablja se kot metoda razreda `PartsOfSpeechTagger`, kot parametra pa podamo podatke, ki jih želimo procesirati s parts-of-speech in parameter `number_of_processes`, s katerim povemo, na koliko nitih želimo, da se program izvaja. Ker je ta način izvajanja primeren za delo nad večjim številom korpusev, podatkov ne dodaja v spremenljivko, temveč rezultate izpisuje v datoteke. Rezultate lahko uporabimo za merjenje povprečij in ostale statistike, kjer ID dokumenta ni pomemben (za primere, kjer potrebujemo podatek, kateri slovar pripada kateremu pismu, si poglejte podpoglavje "Pridobivanje statistike za posamezno pismo").
+
+
 
 Primer uporabe:
 
@@ -55,9 +59,11 @@ I am now convinced that my condition is too chronic, and therefore a cure is dou
 ```
 
 ```python
-pos = PartsOfSpeechTagger("./suicide-notes-database/results")
-pos.partsOfSpeechTagging(data)
-#pos.data_tagged
+data = readFiles("./suicide-notes-database/completers-pp/", ".//post")
+pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
+
+# multi threaded tagger
+pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 ```
 
 Rezultat:
@@ -67,13 +73,6 @@ Rezultat:
 ```
 
 POMEMBNO: Pred zagonom omenjene funkcije, je treba pognati metodo `downloadLexicons`, ki s spleta naloži vse potebne leksikone in ostale datoteke, ki jih NLTK potrebuje za delovanje.
-
-Dodana je tudi podpora za več nitno delovanje. Uporablja se isto, kot `PartsOfSpeechTagger`, le da tu vnesemo še dodatni parameter `number_of_processes`, s katerim podamo, na koliko nitih želimo, da se program izvaja. Ker je ta način izvajanja primeren za delo nad večjim številom korpusev, podatkov ne dodaja v `self.data_tagged`, temveč rezultate izpisuje v datoteke.
-
-```python
-pos = PartsOfSpeechTagger()
-pos.partsOfSpeechTaggingMultiprocessed(data, 6)
-```
 
 
 
@@ -114,9 +113,43 @@ JJ  :  4.44444444444
 
 
 
+Slovar označb smo normalizirali na značke, prikazane spodaj, a je poljubno razširljiv:
+
+```python
+# normalize dictionary
+dict = { 
+    	"CC" : 0, "DT" : 0, "EX" : 0, "IN" : 0,	
+    	"JJ" : 0, "JJS" : 0, "MD" : 0, "NN" : 0,	
+    	"NNS" : 0, "PDT" : 0, "PRP" : 0, "PRP$" : 0, 
+    	"RB" : 0, "TO" : 0,	"VB" : 0, "VBD" : 0, 
+    	"VBG" : 0, "VBN" : 0, "VBP" : 0, "VBZ" : 0, 
+    	"WDT" : 0
+	}
+```
+
+
+
 ***OPOZORILO: Obe funkciji, `partsOfSpeechTaggingMultiprocessed` in `partsOfSpeechStatistics`, ob zagonu pobrišeta vsebino podanih direktorijev!***
 
 Podrobnejši primer uporabe je prikazan v `partsOfSpeech.py` v `"__main__"`.
+
+
+
+#### Pridobivanje statistike za posamezno pismo
+
+Pridobi statistiko za vsako posamezno pismo in pri tem ohrani ime pisma (za to poskrbi funkcija `getFileByFileStatistics`):
+
+```python
+full_data_completers = []
+folder_path = "./suicide-notes-database/completers-pp/"
+pos_folder_path = "./suicide-notes-database/parts_of_speech/"
+statistics_folder_path = "./suicide-notes-database/parts_of_speech_statistics/"
+paragraph_tag_name = ".//post"
+full_data_completers = getFileByFileStatistics(folder_path, pos_folder_path, 		statistics_folder_path, paragraph_tag_name)
+
+## print 1st letter's pos dictionary
+print full_data_completers[1][0][1][0]
+```
 
 
 
@@ -139,7 +172,10 @@ Spremenljivka `corpus` je tipa `list` in vsak element predstavlja celotno vsebin
 
 Funkcija `bagOfWords` poskrbi za izdelavo slovarja-vocabulary kourpusa. Prav tako pa pove frekvenco besed v posameznem elementu korpusa glede na slovar.
 
+
+
 ### Pre-processing
+
 Pripravi korpuse na nadaljno uporabo. Iz teksta odstrani ločila, številke ter vse ostale ne standardne znake. Poskrbi za pretvorbo velikih črk v male črke.
 
 Primer uporabe:
@@ -162,6 +198,8 @@ Izhod:
 ```text
 	the act of taking my own life is not something that i do without a lot of thought i don't believe that people should take their own lives without deep and thoughtful reflection over a considerable period of time i do believe strongly however that the right to do so is one of the most fundamental rights anyone in a free society should have for me much of the world makes no sense but my feelings about what i am doing ring loud and clear to an inner ear and to a place where there is no self only calm love always wendy
 ```
+
+
 ### Readability
 
 Nad korpusom izvede teste bralnosti teksta, po Flesch-ovi metodi in po metodi Flesch-Kincaid.
