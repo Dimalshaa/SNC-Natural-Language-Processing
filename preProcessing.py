@@ -31,7 +31,7 @@ def popraviBesedilo(besedilo):
                 izhod+=char
         elif char.isspace():
             izhod+=char
-        elif char=="’":
+        elif char=="ï¿½":
             izhod+=char
         elif char=="'":
             izhod+=char
@@ -45,12 +45,15 @@ def shraniDatoteko(path, filename, besedilo):
     file_out.write(besedilo)
 
      
-    
+
 if __name__ == "__main__":
     #path -> mapa kjer se nahajajo datoteke za obdelavo
     #path_izhod -> mapa v katero bomo shranjevali popravljene datoteke
-    path = "./suicide-notes-database/raw/genuine/"
-    path_izhod = "./suicide-notes-database/raw/genuine-predobdelana/"
+    #path = "./suicide-notes-database/completers/"
+    #path_izhod = "./suicide-notes-database/completers-pp/"
+
+    path = "./suicide-notes-database/elicitors/"
+    path_izhod = "./suicide-notes-database/elicitors-pp/"
     
     datoteke = zgradiListoDatotek(path)
 

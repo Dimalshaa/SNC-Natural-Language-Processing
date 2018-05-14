@@ -19,7 +19,7 @@ outputs file contents as string
 def textFileParser(filename):
     data = []
     with codecs.open(filename, 'r', encoding='utf-8', errors='ignore') as text_file:
-        data=text_file.read().replace('\n', '')
+        data= text_file.read().replace('\n', '')
     return [data]
 
 """
@@ -66,6 +66,8 @@ def downloadLexicons():
     nltk.download('punkt')
     nltk.download('averaged_perceptron_tagger')
     nltk.download('brown')
+    nltk.download('cmudict')
+    
 
 """
 deletes all files in a given directory, with selected file extension
@@ -196,26 +198,27 @@ class PartsOfSpeechReader():
                     results[key] = d[key]
         
         for key in results:
-            #print key, " : ", results[key]
+            print key, " : ", results[key]
             results[key] /= len(dictionaries)
-            #print key, " : ", results[key]
+            print key, " : ", results[key]
         
         return results
 
-
+"""
 
 if __name__ == "__main__":
     #downloadLexicons()
 
-
+    
     #### LEARNING SET
     ### COMPLETERS
-    data = readFiles("./suicide-notes-database/completers/", ".//post")
+    data = readFiles("./suicide-notes-database/completers-pp/", ".//post")
     pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
 
     # multi threaded tagger
     pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 
+    
     # reader : statistics
     pos_reader = PartsOfSpeechReader(
         "./suicide-notes-database/parts_of_speech/",
@@ -224,9 +227,8 @@ if __name__ == "__main__":
     pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
     statistics_completers = pos_reader.getMedianStatistics()
 
-
     ### ELICITORS
-    data = readFiles("./suicide-notes-database/elicitors/", ".//post")
+    data = readFiles("./suicide-notes-database/elicitors-pp/", ".//post")
     pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
 
     # multi threaded tagger
@@ -240,4 +242,4 @@ if __name__ == "__main__":
     pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
     statistics_elicitors = pos_reader.getMedianStatistics()
 
-
+"""
