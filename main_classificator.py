@@ -67,11 +67,10 @@ if __name__ == "__main__":
     statistics_elicitors = pos_reader.getMedianStatistics()
     
     ###Flesch-ova metoda in metoda Flesch-Kincaid -> COMPLETERS
-    flesch_completers, kincaid_completers = fleschMediana("./suicide-notes-database/completers-pp/")
+    flesch_completers, kincaid_completers = fleschMediana("./suicide-notes-database/completers/")
 
     ###Flesch-ova metoda in metoda Flesch-Kincaid -> ELICITORS
-    flesch_elicitors, kincaid_elicitors = fleschMediana("./suicide-notes-database/elicitors-pp/")
-
+    flesch_elicitors, kincaid_elicitors = fleschMediana("./suicide-notes-database/elicitors/")
 
     cvs_mean_pos.append(["Flesch score", flesch_completers, flesch_elicitors])
     cvs_mean_pos.append(["Flesch-Kincaid grade", kincaid_completers, kincaid_elicitors])
@@ -80,9 +79,9 @@ if __name__ == "__main__":
         cvs_mean_pos.append([key, statistics_completers[key], statistics_elicitors[key]])
 
 
-
     with open("medians.csv", 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE) #, delimiter='|', quotechar='',escapechar='\\')
         wr.writerow(csv_attributes)
         for tag in cvs_mean_pos:
             wr.writerow(tag)
+

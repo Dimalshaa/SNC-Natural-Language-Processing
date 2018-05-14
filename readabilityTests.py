@@ -6,10 +6,11 @@ import fnmatch
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import cmudict
+import codecs
 
 prondict = cmudict.dict()
 
-numsyllables_pronlist = lambda l: len(filter(lambda s: (s.encode('ascii', 'ignore').lower()[-1]).isdigit(), l))
+numsyllables_pronlist = lambda l: len(filter(lambda s: (s.encode('utf-8', 'ignore').lower()[-1]).isdigit(), l))
 
 def text_statistics(text):
     word_count = get_word_count(text)
@@ -46,7 +47,7 @@ def find_files(directory, pattern):
                 yield filename
 
 def read_file(file):
-    with open(file,'r') as f:
+    with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as f:
         return f.read()
 
 """
