@@ -7,7 +7,20 @@ from partsOfSpeech import PartsOfSpeechReader
 import nltk
 import csv
 
+def fleschMediana(path):
+    results=rt.readibility_test(path, "*.txt")
+    sumOfValuesFLESCH = 0
+    sumOfValuesKINCAID = 0
 
+    #iteracija med rezultati
+    for result in results:
+        sumOfValuesFLESCH += float(str(result[1]))
+        sumOfValuesKINCAID += float(str(result[2]))
+
+    meanFLESCH = sumOfValuesFLESCH / len(results)
+    meanKINCAID = sumOfValuesKINCAID / len(results)
+
+    return meanFLESCH, meanKINCAID
 
 
 if __name__ == "__main__":
@@ -49,7 +62,16 @@ if __name__ == "__main__":
         )
     pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
     statistics_elicitors = pos_reader.getMedianStatistics()
+    
+    ###Flesch-ova metoda in metoda Flesch-Kincaid -> COMPLETERS
+    flesch_completers, kincaid_completers = fleschMediana("./suicide-notes-database/completers-pp/");
 
+    ###Flesch-ova metoda in metoda Flesch-Kincaid -> ELICITORS
+    flesch_elicitors, kincaid_elicitors = fleschMediana("./suicide-notes-database/elicitors-pp/");
+
+
+    cvs_mean_pos.append(["Flesch score", flesch_completers, flesch_elicitors])
+    cvs_mean_pos.append(["Flesch-Kincaid grade", kincaid_completers, kincaid_elicitors])
 
     for key in statistics_elicitors:
         cvs_mean_pos.append([key, statistics_completers[key], statistics_elicitors[key]])
