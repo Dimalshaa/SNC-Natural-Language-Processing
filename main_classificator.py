@@ -13,12 +13,15 @@ def fleschMediana(path):
     sumOfValuesKINCAID = 0
 
     #iteracija med rezultati
+    counter = 0
     for result in results:
         sumOfValuesFLESCH += float(str(result[1]))
         sumOfValuesKINCAID += float(str(result[2]))
+        counter += 1
 
-    meanFLESCH = sumOfValuesFLESCH / len(results)
-    meanKINCAID = sumOfValuesKINCAID / len(results)
+
+    meanFLESCH = sumOfValuesFLESCH / counter
+    meanKINCAID = sumOfValuesKINCAID / counter
 
     return meanFLESCH, meanKINCAID
 
@@ -64,10 +67,10 @@ if __name__ == "__main__":
     statistics_elicitors = pos_reader.getMedianStatistics()
     
     ###Flesch-ova metoda in metoda Flesch-Kincaid -> COMPLETERS
-    flesch_completers, kincaid_completers = fleschMediana("./suicide-notes-database/completers-pp/");
+    flesch_completers, kincaid_completers = fleschMediana("./suicide-notes-database/completers-pp/")
 
     ###Flesch-ova metoda in metoda Flesch-Kincaid -> ELICITORS
-    flesch_elicitors, kincaid_elicitors = fleschMediana("./suicide-notes-database/elicitors-pp/");
+    flesch_elicitors, kincaid_elicitors = fleschMediana("./suicide-notes-database/elicitors-pp/")
 
 
     cvs_mean_pos.append(["Flesch score", flesch_completers, flesch_elicitors])
@@ -75,7 +78,6 @@ if __name__ == "__main__":
 
     for key in statistics_elicitors:
         cvs_mean_pos.append([key, statistics_completers[key], statistics_elicitors[key]])
-        print key, " : ", statistics_completers[key]
 
 
 
