@@ -15,8 +15,8 @@ def fleschMediana(path):
     #iteracija med rezultati
     counter = 0
     for result in results:
-        sumOfValuesFLESCH += float(str(result[1]))
-        sumOfValuesKINCAID += float(str(result[2]))
+        sumOfValuesFLESCH += float(result[1])
+        sumOfValuesKINCAID += float(result[2])
         counter += 1
 
 
