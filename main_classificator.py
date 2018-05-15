@@ -41,6 +41,7 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 
     csv_out_completers = []
     csv_out_elicitors = []
+    csv_attributes = []
 
     results=rt.readibility_test(regular_completers_folder, "*.txt")
     results_2=rt.readibility_test(regular_elicitors_folder, "*.txt") 
@@ -56,18 +57,25 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         
         dictionary = full_data_completers[i][0][1][0]
         for key in dictionary:
+            if i == 0:
+                csv_attributes.append(key)
+                
             output.append(dictionary[key]) 
-    
-        """
+           
         res = results[i]
         output.extend(float(res[1]))
         output.extend(float(res[2]))
+
+        if i==0:
+            csv_out_completers.append(csv_attributes)
+            csv_out_elicitors.append(csv_attributes)
+        
         csv_out_completers.append(output)
-        """
+        
     
     with open(out_completers_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE)
-        #wr.writerow(csv_attributes)
+        wr.writerow(csv_attributes)
         for tag in cvs_mean_pos:
            wr.writerow(tag)
 
@@ -91,7 +99,7 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 
     with open(out_elictors_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE)
-        #wr.writerow(csv_attributes)
+        wr.writerow(csv_attributes)
         for tag in cvs_mean_pos:
            wr.writerow(tag)        
     
