@@ -52,6 +52,18 @@ if __name__ == "__main__":
     #path = "./suicide-notes-database/completers/"
     #path_izhod = "./suicide-notes-database/completers-pp/"
 
+    path = "./suicide-notes-database/completers/"
+    path_izhod = "./suicide-notes-database/completers-pp/"
+    
+    datoteke = zgradiListoDatotek(path)
+
+    for i in range(0, len(datoteke)):
+        filename = path + datoteke[i]
+        besedilo = preberiDatoteko(filename)
+        popravljeno_besedilo = popraviBesedilo(besedilo)
+        shraniDatoteko(path_izhod, datoteke[i], popravljeno_besedilo)
+       
+
     path = "./suicide-notes-database/elicitors/"
     path_izhod = "./suicide-notes-database/elicitors-pp/"
     
@@ -62,4 +74,25 @@ if __name__ == "__main__":
         besedilo = preberiDatoteko(filename)
         popravljeno_besedilo = popraviBesedilo(besedilo)
         shraniDatoteko(path_izhod, datoteke[i], popravljeno_besedilo)
-       
+
+    path = "./suicide-notes-database/TESTER/C/"
+    path_izhod = "./suicide-notes-database/TESTER/C-pp/"
+    
+    datoteke = zgradiListoDatotek(path)
+
+    for i in range(0, len(datoteke)):
+        filename = path + datoteke[i]
+        besedilo = preberiDatoteko(filename)
+        popravljeno_besedilo = popraviBesedilo(besedilo)
+        shraniDatoteko(path_izhod, datoteke[i], popravljeno_besedilo)
+
+    path = "./suicide-notes-database//TESTER/E/"
+    path_izhod = "./suicide-notes-database/TESTER/E-pp/"
+    
+    datoteke = zgradiListoDatotek(path)
+
+    for i in range(0, len(datoteke)):
+        filename = path + datoteke[i]
+        besedilo = preberiDatoteko(filename)
+        popravljeno_besedilo = popraviBesedilo(besedilo)
+        shraniDatoteko(path_izhod, datoteke[i], popravljeno_besedilo)
