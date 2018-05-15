@@ -199,8 +199,41 @@ Izhod:
 	the act of taking my own life is not something that i do without a lot of thought i don't believe that people should take their own lives without deep and thoughtful reflection over a considerable period of time i do believe strongly however that the right to do so is one of the most fundamental rights anyone in a free society should have for me much of the world makes no sense but my feelings about what i am doing ring loud and clear to an inner ear and to a place where there is no self only calm love always wendy
 ```
 
-
 ### Readability
+
+<u>Besedilo naj se ne pre-procesira pred izvajanjem testa</u>
+
+####Teorija
+
+#####Flesch score
+
+`RE = 206.835 – (1.015 x ASL) – (84.6 x ASW)` 
+
+**RE** = Readability Ease 
+
+**ASL** = Average Sentence Length (i.e., the number of words divided by the number of sentences) 
+
+**ASW** = Average number of syllables per word (i.e., the number of syllables divided by the number of words) 
+
+<u>Višji je RE manjša je kompleksnost besedila</u>. Pričakovan izhod je med [0 - 100] vendar pa se zaradi napak v formatiranju lahko pojavijo napake. Te bomo normalizirali na pričakovane vrednosti(tj. 0 - 100)
+
+*Mutilacije RE se lahko zgodijo zaradi nepravilnega formatiranja besedila (npr. manjkajo ločila,...)*
+
+
+
+##### Flesch-Kincaid level
+
+`RL=0.39 x ( TW / TS ) + 11.8 x ( TSYL / TW ) - 15.59`
+
+**TW** = Total Words
+
+**TS** = Total Sentences
+
+**TSYL** = Total Syllables
+
+<u>Rezultat ustreza razrednem nivoju v ZDA. Optimalno je med **[0 - 12]**, ekstremne vrednosti pa sežjo med **[-3,4   - 13+]**. Rezultat je, tako kot pri RE odvisen od pravilnega formatiranja besedila.</u>
+
+
 
 Nad korpusom izvede teste bralnosti teksta, po Flesch-ovi metodi in po metodi Flesch-Kincaid.
 
