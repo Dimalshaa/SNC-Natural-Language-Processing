@@ -150,7 +150,8 @@ if __name__ == "__main__":
 
     singleFileStatisticsCSV("./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
                             "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
-                            "./single-letter-statistics-completers/", "./single-letter-statistics-elicitos/")
+                            "./single-letter-statistics-completers/", "./single-letter-statistics-elicitos/",
+                            "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
                             
                             
 
