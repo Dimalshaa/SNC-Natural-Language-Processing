@@ -8,6 +8,7 @@ from partsOfSpeech import getFileByFileStatistics
 import nltk
 import csv
 
+
 def fleschMediana(path):
     results=rt.readibility_test(path, "*.txt")
     sumOfValuesFLESCH = 0
@@ -26,6 +27,9 @@ def fleschMediana(path):
 
     return meanFLESCH, meanKINCAID
 
+"""
+saves CVS file of indiviual letter attribute values, for completers and elicitors
+"""
 def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistics_folder, pos_folder, out_completers_filename,
                             out_elictors_filename, regular_completers_folder, regular_elicitors_folder):
 
@@ -170,11 +174,11 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
 if __name__ == "__main__":
     #downloadLexicons()
     
-    """
+    
     saveMeanStatisticsCSV("means.csv", "./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
         "./suicide-notes-database/parts_of_speech/", "./suicide-notes-database/parts_of_speech_statistics/", ".//post",
         "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
-    """
+    
 
     singleFileStatisticsCSV("./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
                             "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
