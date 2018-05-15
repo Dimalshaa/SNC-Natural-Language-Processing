@@ -4,6 +4,7 @@ from partsOfSpeech import downloadLexicons
 from partsOfSpeech import readFiles
 from partsOfSpeech import PartsOfSpeechTagger
 from partsOfSpeech import PartsOfSpeechReader
+from partsOfSpeech import getFileByFileStatistics
 import nltk
 import csv
 
@@ -44,6 +45,7 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
     results=rt.readibility_test(regular_completers_folder, "*.txt")
     results_2=rt.readibility_test(regular_elicitors_folder, "*.txt") 
 
+    
     for i in range(0, num_completers):
         output = []
         path = full_data_completers[i][0][0]
@@ -53,17 +55,19 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         output.extend(filename)
         
         dictionary = full_data_completers[i][0][1][0]
-        for key in dictionary
-            output.extend(dictionary[key]) 
-
-        res = results[i];
-        output.extend(float(res[1]));
-        output.extend(float(res[2]));
+        for key in dictionary:
+            output.append(dictionary[key]) 
+    
+        """
+        res = results[i]
+        output.extend(float(res[1]))
+        output.extend(float(res[2]))
         csv_out_completers.append(output)
-
+        """
+    
     with open(out_completers_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE)
-        wr.writerow(csv_attributes)
+        #wr.writerow(csv_attributes)
         for tag in cvs_mean_pos:
            wr.writerow(tag)
 
@@ -76,21 +80,21 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         output_2.extend(filename_2)
         
         dictionary_2 = full_data_elicitors[i][0][1][0]
-        for key in dictionary_2
+        for key in dictionary_2:
             output_2.extend(dictionary_2[key])
 
-        res_2 = results_2[i];
-        output.extend(float(res_2[1]));
-        output.extend(float(res_2[2]));
+        res_2 = results_2[i]
+        output.extend(float(res_2[1]))
+        output.extend(float(res_2[2]))
         csv_out_elicitors.append(output)
 
 
     with open(out_elictors_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE)
-        wr.writerow(csv_attributes)
+        #wr.writerow(csv_attributes)
         for tag in cvs_mean_pos:
            wr.writerow(tag)        
-   
+    
 
 """
 saves CVS file of means for completers and elicitors
@@ -138,19 +142,21 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
         wr.writerow(csv_attributes)
         for tag in cvs_mean_pos:
             wr.writerow(tag)
-
+    
 
 
 if __name__ == "__main__":
     #downloadLexicons()
     
+    """
     saveMeanStatisticsCSV("means.csv", "./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
         "./suicide-notes-database/parts_of_speech/", "./suicide-notes-database/parts_of_speech_statistics/", ".//post",
         "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
+    """
 
     singleFileStatisticsCSV("./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
                             "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
-                            "./single-letter-statistics-completers/", "./single-letter-statistics-elicitos/",
+                            "learning_set_completers.csv", " learning_set_elicitors.csv",
                             "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
                             
                             

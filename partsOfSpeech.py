@@ -257,9 +257,9 @@ class PartsOfSpeechReader():
                     results[key] = d[key]
         
         for key in results:
-            print key, " : ", results[key]
+            #print key, " : ", results[key]
             results[key] /= len(dictionaries)
-            print key, " : ", results[key]
+            #print key, " : ", results[key]
         
         return results
 
