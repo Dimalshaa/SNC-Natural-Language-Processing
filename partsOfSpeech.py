@@ -19,7 +19,7 @@ outputs file contents as string
 def textFileParser(filename):
     data = []
     with codecs.open(filename, 'r', encoding='utf-8', errors='ignore') as text_file:
-        data=text_file.read().replace('\n', '')
+        data= text_file.read().replace('\n', '')
     return [data]
 
 """
@@ -58,6 +58,24 @@ def readFiles(folder_path, paragraph_tag_name):
         print(len(i)) """
 
     return data
+    
+"""
+similar to readFiles, only this one work for a single file
+outputs data AND filename
+supports .xml and .txt files
+"""
+def readSingleFile(full_file_path, paragraph_tag_name):
+    data = []
+
+    filename, file_extension = os.path.splitext(full_file_path) #gets file extension
+    if file_extension == ".txt":
+       data.append([full_file_path, textFileParser(full_file_path)])
+    elif file_extension == ".xml":
+        data.append([full_file_path, xmlFileParser(full_file_path, paragraph_tag_name)])
+    else:
+        print("File ", full_file_path, " uses unsupported file format!")
+
+    return data
 
 """
 downloads all lexicons and other files, used by nltk
@@ -66,7 +84,8 @@ def downloadLexicons():
     nltk.download('punkt')
     nltk.download('averaged_perceptron_tagger')
     nltk.download('brown')
-
+    nltk.download('cmudict')
+    
 """
 deletes all files in a given directory, with selected file extension
 """
@@ -76,17 +95,37 @@ def deleteFilesInDirectory(path, file_extension):
         os.remove(f)
     print "[deleteFilesInDirectory] Deleted ", len(filelist), " files"
 
+"""
+returns parts of speech statistics for each specific file
+parameters: preprocessed files folder path, PartsOfSpeechReader constructor params
+"""
+def getFileByFileStatistics(folder_path, pos_folder_path, statistics_folder_path, paragraph_tag_name):
+    full_data_completers = []
+    filenames = os.listdir(folder_path)
+    for i in range(0, len(filenames)):
+        full_data_completers.append(readSingleFile(folder_path + filenames[i], paragraph_tag_name))
+
+    pos = PartsOfSpeechTagger(pos_folder_path)
+    pos_reader = PartsOfSpeechReader(
+        pos_folder_path,
+        statistics_folder_path
+    )
+        
+    for fd in full_data_completers:
+        fd[0][1][0] = pos.partsOfSpeechTagging(fd[0][1][0])
+        fd[0][1][0] = pos_reader.partsOfSpeechSingleFileStatistics(fd[0][1][0])
+
+    return full_data_completers
+
+
 class PartsOfSpeechTagger:
     def __init__(self, results_folder_path):
-        self.data_tagged = []
         self.results_folder_path = results_folder_path
 
     ### single thread method
     def partsOfSpeechTagging(self, data):
-        for corpus in data:
-            for paragraph in corpus:
-                tokenized = nltk.word_tokenize(paragraph.decode('utf-8'))
-                self.data_tagged.append(nltk.pos_tag(tokenized))
+        tokenized = nltk.word_tokenize(data.decode('utf-8'))
+        return nltk.pos_tag(tokenized)
 
     ### multi thread methods
     def tagger(self, data, processID):
@@ -133,6 +172,7 @@ class PartsOfSpeechTagger:
         for k in range(0, len(processes)):
             processes[k].join() 
 
+
 class PartsOfSpeechReader():
     def __init__(self, pos_folder_path, statistics_folder_path):
         self.pos_folder_path = pos_folder_path
@@ -160,12 +200,17 @@ class PartsOfSpeechReader():
         notes = pos_data
         for note in notes:
             note = ast.literal_eval(note)
-            dict = {}
+            # normalize dictionary
+            dict = {"CC" : 0, "DT" : 0, "EX" : 0, "IN" : 0,	
+                "JJ" : 0, "JJS" : 0, "MD" : 0, "NN" : 0,	
+                "NNS" : 0, "PDT" : 0, "PRP" : 0, "PRP$" : 0, 
+                "RB" : 0, "TO" : 0,	"VB" : 0, "VBD" : 0, 
+                "VBG" : 0, "VBN" : 0, "VBP" : 0, "VBZ" : 0, 
+                "WDT" : 0
+                }
             for tagged_word in note:
                 if tagged_word[1] in dict:
                     dict[tagged_word[1]] += 1.0
-                else:
-                    dict[tagged_word[1]] = 1.0
 
             self.save_obj(dict)
 
@@ -174,6 +219,22 @@ class PartsOfSpeechReader():
                 print tag, ' : ', dict[tag]
             """
         return
+
+    def partsOfSpeechSingleFileStatistics(self, note):
+        # normalize dictionary
+        dict = {"CC" : 0, "DT" : 0, "EX" : 0, "IN" : 0,	
+                "JJ" : 0, "JJS" : 0, "MD" : 0, "NN" : 0,	
+                "NNS" : 0, "PDT" : 0, "PRP" : 0, "PRP$" : 0, 
+                "RB" : 0, "TO" : 0,	"VB" : 0, "VBD" : 0, 
+                "VBG" : 0, "VBN" : 0, "VBP" : 0, "VBZ" : 0, 
+                "WDT" : 0
+                }
+
+        for tagged_word in note:
+            if tagged_word[1] in dict:
+                dict[tagged_word[1]] += 1.0
+
+        return dict
 
     # load from file
     def load_obj(self):
@@ -207,15 +268,32 @@ class PartsOfSpeechReader():
 if __name__ == "__main__":
     #downloadLexicons()
 
+    """
+    full_data_completers = []
+    folder_path = "./suicide-notes-database/completers-pp/"
+    pos_folder_path = "./suicide-notes-database/parts_of_speech/"
+    statistics_folder_path = "./suicide-notes-database/parts_of_speech_statistics/"
+    paragraph_tag_name = ".//post"
+    full_data_completers = getFileByFileStatistics(folder_path, pos_folder_path, statistics_folder_path, paragraph_tag_name)
+    """
 
+
+    """
+    ### Tako dobis slovar! ;TODO: delete this comment + line: 
+    print full_data_completers[1][0][1][0]
+
+    """
+
+    """
     #### LEARNING SET
     ### COMPLETERS
-    data = readFiles("./suicide-notes-database/completers/", ".//post")
+    data = readFiles("./suicide-notes-database/completers-pp/", ".//post")
     pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
 
     # multi threaded tagger
     pos.partsOfSpeechTaggingMultiprocessed(data, 6)
 
+    
     # reader : statistics
     pos_reader = PartsOfSpeechReader(
         "./suicide-notes-database/parts_of_speech/",
@@ -224,9 +302,8 @@ if __name__ == "__main__":
     pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
     statistics_completers = pos_reader.getMedianStatistics()
 
-
     ### ELICITORS
-    data = readFiles("./suicide-notes-database/elicitors/", ".//post")
+    data = readFiles("./suicide-notes-database/elicitors-pp/", ".//post")
     pos = PartsOfSpeechTagger("./suicide-notes-database/parts_of_speech/")
 
     # multi threaded tagger
@@ -240,4 +317,4 @@ if __name__ == "__main__":
     pos_reader.partsOfSpeechStatistics( pos_reader.readAnalyzedData() )
     statistics_elicitors = pos_reader.getMedianStatistics()
 
-
+    """

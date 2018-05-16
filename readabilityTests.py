@@ -6,10 +6,11 @@ import fnmatch
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import cmudict
+import codecs
 
 prondict = cmudict.dict()
 
-numsyllables_pronlist = lambda l: len(filter(lambda s: (s.encode('ascii', 'ignore').lower()[-1]).isdigit(), l))
+numsyllables_pronlist = lambda l: len(filter(lambda s: (s.encode('utf-8', 'ignore').lower()[-1]).isdigit(), l))
 
 def text_statistics(text):
     word_count = get_word_count(text)
@@ -32,11 +33,23 @@ fk_formula = lambda word_count, sent_count, syllable_count : 0.39 * word_count /
 
 def flesch(text):
     word_count, sent_count, syllable_count = text_statistics(text)
-    return flesch_formula(word_count, sent_count, syllable_count)
+    val=float(flesch_formula(word_count, sent_count, syllable_count))
+    if(val<float(1)):
+        return float(1)
+    elif(val>100):
+        return float(100)
+    else:
+        return val
  
 def flesch_kincaid(text):
     word_count, sent_count, syllable_count = text_statistics(text)
-    return fk_formula(word_count, sent_count, syllable_count)
+    val = fk_formula(word_count, sent_count, syllable_count)
+    if(val<float(0)):
+        return float(0)
+    elif(val>12):
+        return float(12)
+    else:
+        return val
 
 def find_files(directory, pattern):
     for root, dirs, files in os.walk(directory):
@@ -46,7 +59,7 @@ def find_files(directory, pattern):
                 yield filename
 
 def read_file(file):
-    with open(file,'r') as f:
+    with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as f:
         return f.read()
 
 """
@@ -57,6 +70,7 @@ outputs a generator yielding a multidimensional array having values
 """
 def readibility_test(root, file_pattern):
     nltk.download('punkt')
+    nltk.download('cmudict')
     files=find_files(root, file_pattern)
     for file in files:
         text=read_file(file)
@@ -66,5 +80,10 @@ def readibility_test(root, file_pattern):
 
 
 
-#for result in readibility_test(".","*.txt"):
-#    print result[0]
+results=readibility_test("./dict", "*.txt")
+for result in results:
+    print "Ime datoteke "+result[0]
+    print "Flesch score "+str(result[1])
+    print "Flesch-Kincaid grade "+str(result[2])
+
+#https://datawarrior.wordpress.com/2016/03/29/flesch-kincaid-readability-measure/
