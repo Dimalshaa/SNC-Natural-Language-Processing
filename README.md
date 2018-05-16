@@ -169,10 +169,37 @@ corpus = buildCorpus('.\suicide-notes-database\completers')
 ```
 Spremenljivka `corpus` je tipa `list` in vsak element predstavlja celotno vsebino datoteke.
 
-
 Funkcija `bagOfWords` poskrbi za izdelavo slovarja-vocabulary kourpusa. Prav tako pa pove frekvenco besed v posameznem elementu korpusa glede na slovar.
 
+#### Splošna statistika
 
+Funkcija splosnaStatistika kot vhodni parameter sprejme pot do direktorija kjer se nahajo pisma. 
+
+Primer klica: 
+
+```
+statistika = splosnaStatistika('./suicide-notes-database/completers')
+```
+
+Kot izhod pa dobimo array z statistiko v obliki
+
+imeDatoteke1.txt|st.besed|st.znakov|st.crk|st.stavkov
+imeDatoteke2.txt|st.besed|st.znakov|st.crk|st.stavkov
+
+Primer izhoda:
+
+------STATISTIKA-------
+1.txt|195|242|682|20|
+10.txt|71|103|253|6|
+11.txt|34|49|117|4|
+12.txt|42|61|180|7|
+13.txt|92|106|309|11|
+14.txt|33|37|121|1|
+15.txt|75|109|301|8|
+16.txt|35|48|129|4|
+17.txt|13|21|47|3|
+18.txt|193|247|760|20|
+19.txt|9|11|30|2|
 
 ### Pre-processing
 
