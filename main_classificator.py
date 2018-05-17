@@ -1,5 +1,6 @@
 import partsOfSpeech as pos
 import readabilityTests as rt
+import featureSelection as fss
 from partsOfSpeech import downloadLexicons
 from partsOfSpeech import readFiles
 from partsOfSpeech import PartsOfSpeechTagger
@@ -7,6 +8,7 @@ from partsOfSpeech import PartsOfSpeechReader
 from partsOfSpeech import getFileByFileStatistics
 import nltk
 import csv
+
 
 
 def fleschMediana(path):
@@ -27,6 +29,32 @@ def fleschMediana(path):
 
     return meanFLESCH, meanKINCAID
 
+def averageStat(path):
+    stats = fss.splosnaStatistika(path)
+
+    numWords = 0
+    numSigns = 0
+    numChars = 0
+    numSentences = 0
+
+    counter = len(stats)
+
+    for i in range(0, len(stats)):
+        stat = stats[i].split("|")
+
+        numWords += float(stat[1])
+        numSigns += float(stat[2])
+        numChars += float(stat[3])
+        numSentences += float(stat[4])
+
+    meanWords = float(numWords / counter)
+    meanSigns = float(numSigns / counter)
+    meanChars = float(numChars / counter)
+    meanSentences = float(numSentences / counter)
+
+    return meanWords, meanSigns, meanChars, meanSentences
+
+
 """
 saves CVS file of indiviual letter attribute values, for completers and elicitors
 """
@@ -35,7 +63,15 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 
     full_data_completers = []
     full_data_elicitors = []
-    
+
+    stats_completers = fss.splosnaStatistika(regular_completers_folder)
+    stats_elicitors = fss.splosnaStatistika(regular_elicitors_folder)
+
+
+    stat = stats_completers[len(stats_completers)-1].split("|")
+
+    print(stats_completers[len(stats_completers)-1])     
+    print(stat)
     paragraph_tag_name = ".//post"
     full_data_completers = getFileByFileStatistics(completers_folder_pp, pos_folder, statistics_folder, paragraph_tag_name)
     full_data_elicitors = getFileByFileStatistics(elicitors_folder_pp, pos_folder, statistics_folder, paragraph_tag_name)
@@ -84,9 +120,18 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         if i == 0:
             csv_attributes.append("Flesch")
             csv_attributes.append("Kincaid")
+            csv_attributes.append("Num_words")
+            csv_attributes.append("Num_signs")
+            csv_attributes.append("Num_chars")
+            csv_attributes.append("Num_sentence")
 
         output.append(str(res_flesch_completers[i]))
         output.append(str(res_kincaid_completers[i]))
+
+        stat = stats_completers[i].split("|")
+
+        for j in range(1, (len(stat)-1)):
+            output.append(stat[j])
         
         csv_out_completers.append(output)
 
@@ -112,6 +157,12 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 
         output_2.append(str(res_flesch_elicitors[i]))
         output_2.append(str(res_kincaid_elicitors[i]))
+
+        stat_2 = stats_elicitors[i].split("|")
+
+        for j in range(1, (len(stat_2)-1)):
+            output_2.append(stat_2[j])
+
         csv_out_elicitors.append(output_2)
 
 
@@ -163,6 +214,14 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
     for key in statistics_elicitors:
         cvs_mean_pos.append([key, statistics_completers[key], statistics_elicitors[key]])
 
+    meanWordsCompleters, meanSignsCompleters, meanCharsCompleters, meanSentencesCompleters = averageStat(readibility_completers_folder)
+    meanWordsElicitors, meanSignsElicitors, meanCharsElicitors, meanSentencesElicitors = averageStat(readibility_elicitors_folder)
+
+    cvs_mean_pos.append(["Words average", meanWordsCompleters, meanWordsElicitors])
+    cvs_mean_pos.append(["Signs average", meanSignsCompleters, meanSignsElicitors])
+    cvs_mean_pos.append(["Chars average", meanCharsCompleters, meanCharsElicitors])
+    cvs_mean_pos.append(["Sentences average", meanSentencesCompleters, meanSentencesElicitors])
+
     with open(output_csv_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE) #, delimiter='|', quotechar='',escapechar='\\')
         wr.writerow(csv_attributes)
@@ -185,8 +244,9 @@ if __name__ == "__main__":
                             "learning_set_completers.csv", "learning_set_elicitors.csv",
                             "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
 
-                          
+
     singleFileStatisticsCSV("./suicide-notes-database/TESTER/C-pp/", "./suicide-notes-database/TESTER/E-pp/",
                             "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
                             "tester_set_completers.csv", "tester_set_elicitors.csv",
                             "./suicide-notes-database/TESTER/C/", "./suicide-notes-database/TESTER/E/")
+    
