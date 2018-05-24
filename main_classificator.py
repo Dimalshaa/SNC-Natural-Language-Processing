@@ -8,6 +8,7 @@ from partsOfSpeech import PartsOfSpeechReader
 from partsOfSpeech import getFileByFileStatistics
 import nltk
 import csv
+from emotionAnalysis import getEmotionsForCorpus
 
 
 
@@ -233,6 +234,19 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
 if __name__ == "__main__":
     #downloadLexicons()
 
+    rezultat = getEmotionsForCorpus("./suicide-notes-database/completers-pp/", "*.txt")
+
+    
+    for result in rezultat:
+        print result[0] # result[0] -> ime datoteke
+        for emo in result[1]:
+            print emo[0] # emo[0] -> ime emotion
+            print emo[1] # emo[1] -> level
+        print '..................................'
+    
+
+
+    """
     # directories path names
     learning_completers = "./suicide-notes-database/completers/"
     learning_elicitors = "./suicide-notes-database/elicitors/"
@@ -260,3 +274,5 @@ if __name__ == "__main__":
         "ml-database/tester_set_completers.csv", "ml-database/tester_set_elicitors.csv",
         tester_completers_pp, tester_elicitors_pp)
     
+    """
+

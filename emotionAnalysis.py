@@ -23,7 +23,7 @@ def find_files(directory, pattern):
 
 def read_file(file):
     with codecs.open(file, 'r', encoding='utf-8', errors='ignore') as f:
-        return f.read()
+        return f.read().replace('\n', '')
 
 def getEmotions(text):
     wna = WNAffect('wordnet-1.6/', 'wn-domains-3.2/')

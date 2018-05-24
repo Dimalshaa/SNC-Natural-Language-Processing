@@ -19,7 +19,7 @@ outputs file contents as string
 def textFileParser(filename):
     data = []
     with codecs.open(filename, 'r', encoding='utf-8', errors='ignore') as text_file:
-        data= text_file.read().replace('\n', '')
+        data= text_file.read().replace('\n', '').replace('\r', '')
     return [data]
 
 """
