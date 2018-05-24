@@ -234,7 +234,7 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
 if __name__ == "__main__":
     #downloadLexicons()
 
-    for result in getEmotionsForCorpus('completers-pp','*.txt'):
+    for result in getEmotionsForCorpus('./suicide-notes-database/elicitors-pp/','*.txt'):
         print result[0]
         for emo in result[1]:
             print emo[0]
