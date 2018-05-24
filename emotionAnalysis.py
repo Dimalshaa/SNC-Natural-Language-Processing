@@ -57,14 +57,14 @@ def getEmotionsForCorpus(root, pattern):
         emos=getEmotions(read_file(file))
         yield file, getGrouped(emos)
 
-
+"""
 for result in getEmotionsForCorpus('.','*.txt'):
     print result[0]
     for emo in result[1]:
         print emo[0]
         print emo[1]
     print '..................................'
-
+"""
 
 #downloadLexicons()
 

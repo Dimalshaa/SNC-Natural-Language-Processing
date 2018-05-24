@@ -208,9 +208,16 @@ class PartsOfSpeechReader():
                 "VBG" : 0, "VBN" : 0, "VBP" : 0, "VBZ" : 0, 
                 "WDT" : 0
                 }
+            
+            word_count = 0
             for tagged_word in note:
+                word_count += 1
                 if tagged_word[1] in dict:
                     dict[tagged_word[1]] += 1.0
+
+            # normalize values
+            for tag in dict:
+                dict[tag] /= word_count
 
             self.save_obj(dict)
 
@@ -230,9 +237,15 @@ class PartsOfSpeechReader():
                 "WDT" : 0
                 }
 
+        word_count = 0
         for tagged_word in note:
+            word_count += 1
             if tagged_word[1] in dict:
                 dict[tagged_word[1]] += 1.0
+
+        # normalize values
+        for tag in dict:
+            dict[tag] /= word_count
 
         return dict
 

@@ -71,8 +71,8 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 
     stat = stats_completers[len(stats_completers)-1].split("|")
 
-    print(stats_completers[len(stats_completers)-1])     
-    print(stat)
+    #print(stats_completers[len(stats_completers)-1])     
+    #print(stat)
     paragraph_tag_name = ".//post"
     full_data_completers = getFileByFileStatistics(completers_folder_pp, pos_folder, statistics_folder, paragraph_tag_name)
     full_data_elicitors = getFileByFileStatistics(elicitors_folder_pp, pos_folder, statistics_folder, paragraph_tag_name)
@@ -136,8 +136,8 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         
         csv_out_completers.append(output)
 
-    print(csv_attributes)    
-    print(output)
+    #print(csv_attributes)    
+    #print(output)
     with open(out_completers_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE)
         wr.writerow(csv_attributes)
@@ -234,6 +234,7 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
 if __name__ == "__main__":
     #downloadLexicons()
 
+    """
     for result in getEmotionsForCorpus('./suicide-notes-database/elicitors-pp/','*.txt'):
         print result[0]
         for emo in result[1]:
@@ -241,14 +242,14 @@ if __name__ == "__main__":
             print emo[1]
         print '..................................'
     
-
-
     """
+
     # directories path names
     learning_completers = "./suicide-notes-database/completers/"
     learning_elicitors = "./suicide-notes-database/elicitors/"
     learning_completers_pp = "./suicide-notes-database/completers-pp/"
     learning_elicitors_pp = "./suicide-notes-database/elicitors-pp/"
+
 
     tester_completers = "./suicide-notes-database/TESTER/C-pp/"
     tester_elicitors = "./suicide-notes-database/TESTER/E-pp/"
@@ -259,7 +260,7 @@ if __name__ == "__main__":
         "./suicide-notes-database/parts_of_speech/", "./suicide-notes-database/parts_of_speech_statistics/", ".//post",
         learning_completers, learning_elicitors)
     
-
+    
     singleFileStatisticsCSV(learning_completers_pp, learning_elicitors_pp,
         "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
         "ml-database/learning_set_completers.csv", "ml-database/learning_set_elicitors.csv",
@@ -271,5 +272,4 @@ if __name__ == "__main__":
         "ml-database/tester_set_completers.csv", "ml-database/tester_set_elicitors.csv",
         tester_completers_pp, tester_elicitors_pp)
     
-    """
 
