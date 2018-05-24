@@ -4,17 +4,13 @@ import re
 
 def zgradiListoDatotek(path):
     datoteke = os.listdir(path)
-
     for i in range(0, len(datoteke)):
         print("Datoteka: " + datoteke[i])
-
-
     return datoteke
 
 def preberiDatoteko(dat):
     with file(dat) as f:
         string = f.read()
-
     return string
 
 
@@ -41,7 +37,6 @@ def popraviBesedilo(besedilo):
 def shraniDatoteko(path, filename, besedilo):
     dat = path + filename   
     file_out  = open(dat, 'w')
-
     file_out.write(besedilo)
 
      

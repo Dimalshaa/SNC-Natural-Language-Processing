@@ -232,21 +232,31 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
 
 if __name__ == "__main__":
     #downloadLexicons()
-    
-    
-    saveMeanStatisticsCSV("means.csv", "./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
+
+    # directories path names
+    learning_completers = "./suicide-notes-database/completers/"
+    learning_elicitors = "./suicide-notes-database/elicitors/"
+    learning_completers_pp = "./suicide-notes-database/completers-pp/"
+    learning_elicitors_pp = "./suicide-notes-database/elicitors-pp/"
+
+    tester_completers = "./suicide-notes-database/TESTER/C-pp/"
+    tester_elicitors = "./suicide-notes-database/TESTER/E-pp/"
+    tester_completers_pp = "./suicide-notes-database/TESTER/C/"
+    tester_elicitors_pp = "./suicide-notes-database/TESTER/E/"
+     
+    saveMeanStatisticsCSV("ml-database/means.csv", learning_completers_pp, learning_elicitors_pp,
         "./suicide-notes-database/parts_of_speech/", "./suicide-notes-database/parts_of_speech_statistics/", ".//post",
-        "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
+        learning_completers, learning_elicitors)
     
 
-    singleFileStatisticsCSV("./suicide-notes-database/completers-pp/", "./suicide-notes-database/elicitors-pp/",
-                            "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
-                            "learning_set_completers.csv", "learning_set_elicitors.csv",
-                            "./suicide-notes-database/completers/", "./suicide-notes-database/elicitors/")
+    singleFileStatisticsCSV(learning_completers_pp, learning_elicitors_pp,
+        "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
+        "ml-database/learning_set_completers.csv", "ml-database/learning_set_elicitors.csv",
+        learning_completers, learning_elicitors)
 
 
-    singleFileStatisticsCSV("./suicide-notes-database/TESTER/C-pp/", "./suicide-notes-database/TESTER/E-pp/",
-                            "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
-                            "tester_set_completers.csv", "tester_set_elicitors.csv",
-                            "./suicide-notes-database/TESTER/C/", "./suicide-notes-database/TESTER/E/")
+    singleFileStatisticsCSV(tester_completers, tester_elicitors,
+        "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
+        "ml-database/tester_set_completers.csv", "ml-database/tester_set_elicitors.csv",
+        tester_completers_pp, tester_elicitors_pp)
     
