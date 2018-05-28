@@ -9,6 +9,7 @@ from partsOfSpeech import getFileByFileStatistics
 import nltk
 import csv
 from emotionAnalysis import getEmotionsForCorpus
+from array import array
 
 
 
@@ -60,7 +61,7 @@ def averageStat(path):
 saves CVS file of indiviual letter attribute values, for completers and elicitors
 """
 def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistics_folder, pos_folder, out_completers_filename,
-                            out_elictors_filename, regular_completers_folder, regular_elicitors_folder):
+                            out_elictors_filename, regular_completers_folder, regular_elicitors_folder, unique_emotions):
 
     full_data_completers = []
     full_data_elicitors = []
@@ -93,6 +94,9 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
     res_flesch_elicitors = []
     res_kincaid_elicitors = [] 
 
+    res_emotio_completers = []
+    res_emotio_elicitors = []
+
     csv_attributes.append("Ime_dat")
 
     for result in results:
@@ -102,7 +106,18 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
     for result in results_2:
         res_flesch_elicitors.append(result[1])
         res_kincaid_elicitors.append(result[2])   
-    
+
+
+    arr = array('f', [0]*len(unique_emotions))
+    for result in getEmotionsForCorpus('./suicide-notes-database/completers-pp/', '*.txt'):
+        for emo in result[1]:
+            arr_index = int(unique_emotions.index(str(emo[0]))) 
+            arr[arr_index] = float(emo[1])
+
+        res_emotio_completers.append(arr)
+        arr = array('f', [0]*len(unique_emotions))
+
+
     for i in range(0, num_completers):
         output = []
         path = full_data_completers[i][0][0]
@@ -134,7 +149,16 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         for j in range(1, (len(stat)-1)):
             output.append(stat[j])
         
+
+        values_arr = res_emotio_completers[i]
+        for k in range(0, len(values_arr)):
+            output.append(values_arr[k])
+
         csv_out_completers.append(output)
+
+
+    for emotion in unique_emotions:
+        csv_attributes.append(emotion) 
 
     #print(csv_attributes)    
     #print(output)
@@ -143,6 +167,20 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
         wr.writerow(csv_attributes)
         for tag in csv_out_completers:
            wr.writerow(tag)
+
+
+    ################      ELICITORS       ##########################      
+     
+     
+    arr_2 = array('f', [0]*len(unique_emotions))
+    for result in getEmotionsForCorpus('./suicide-notes-database/elicitors-pp/', '*.txt'):
+        for emo in result[1]:
+            arr_index = int(unique_emotions.index(str(emo[0]))) 
+            arr_2[arr_index] = float(emo[1])
+
+        res_emotio_elicitors.append(arr_2)
+        arr_2 = array('f', [0]*len(unique_emotions))     
+        
 
     for i in range(0, num_elicitors):
         output_2 = []
@@ -163,6 +201,11 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 
         for j in range(1, (len(stat_2)-1)):
             output_2.append(stat_2[j])
+
+
+        values_arr_2 = res_emotio_elicitors[i]
+        for k in range(0, len(values_arr_2)):
+            output_2.append(values_arr_2[k])    
 
         csv_out_elicitors.append(output_2)
 
@@ -229,22 +272,35 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
         for tag in cvs_mean_pos:
             wr.writerow(tag)
     
+def createStacionarDictionary(allEmotions):
+    new_list = list(set(allEmotions))
 
+    return new_list
+
+def getAllEmotions(elicitors, completers):
+    tmp_list = []
+    
+    for result in getEmotionsForCorpus(elicitors,'*.txt'):
+        for emo in result[1]:
+            print emo[0]
+            print emo[1]
+        tmp_list.extend(result[2])
+
+    for res in getEmotionsForCorpus(completers, '*.txt'):
+        print(res[0])
+        for emo in res[1]:
+            print emo[0]
+            print emo[1]
+        tmp_list.extend(res[2])
+        print("----------------")
+
+    return tmp_list    
 
 if __name__ == "__main__":
     #downloadLexicons()
 
-    """
-    for result in getEmotionsForCorpus('./suicide-notes-database/elicitors-pp/','*.txt'):
-        print result[0]
-        for emo in result[1]:
-            print emo[0]
-            print emo[1]
-        print '..................................'
-    
-    """
-
     # directories path names
+    
     learning_completers = "./suicide-notes-database/completers/"
     learning_elicitors = "./suicide-notes-database/elicitors/"
     learning_completers_pp = "./suicide-notes-database/completers-pp/"
@@ -252,24 +308,34 @@ if __name__ == "__main__":
 
 
     tester_completers = "./suicide-notes-database/TESTER/C-pp/"
-    tester_elicitors = "./suicide-notes-database/TESTER/E-pp/"
+    tester_elicitors = "./suicide-notes-database/TESTER/E-pp/" 
     tester_completers_pp = "./suicide-notes-database/TESTER/C/"
     tester_elicitors_pp = "./suicide-notes-database/TESTER/E/"
+
+    listEmotions = []
+    listEmotions = getAllEmotions(learning_elicitors, learning_completers)
+    uniqueEmotions = createStacionarDictionary(listEmotions)
+    print(uniqueEmotions)
      
+    """
     saveMeanStatisticsCSV("ml-database/means.csv", learning_completers_pp, learning_elicitors_pp,
         "./suicide-notes-database/parts_of_speech/", "./suicide-notes-database/parts_of_speech_statistics/", ".//post",
         learning_completers, learning_elicitors)
+    """
     
-    
+    """
     singleFileStatisticsCSV(learning_completers_pp, learning_elicitors_pp,
         "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
         "ml-database/learning_set_completers.csv", "ml-database/learning_set_elicitors.csv",
-        learning_completers, learning_elicitors)
+        learning_completers, learning_elicitors, uniqueEmotions)
 
-
+    """
+    
     singleFileStatisticsCSV(tester_completers, tester_elicitors,
         "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
         "ml-database/tester_set_completers.csv", "ml-database/tester_set_elicitors.csv",
         tester_completers_pp, tester_elicitors_pp)
+    
+    
     
 

@@ -13,6 +13,23 @@ from partsOfSpeech import PartsOfSpeechTagger
 
 
 not_punctuation = lambda w: not (len(w)==1 and (not w.isalpha()))
+new_list = []
+
+def popraviBesedilo(besedilo):
+    izhod = ""
+    
+    for char in besedilo:
+        if char.isalpha():
+            if char.isupper():
+                izhod+=char.lower()
+            else:    
+                izhod+=char
+        elif char.isspace():
+            izhod+=char
+        elif char=="'":
+            izhod+=char
+        
+    return izhod
 
 def find_files(directory, pattern):
     for root, dirs, files in os.walk(directory):
@@ -38,8 +55,8 @@ def getEmotions(text):
             if(emo != None):
                 yield tag[0],emo.name,emo.level
 
-def getGrouped(emos):
-    
+def getGrouped(emos, num_words):
+    global new_list
     for key,group in groupby(sorted(emos,key=lambda y: y[1].decode('utf-8')) ,lambda x: x[1].decode('utf-8')):
 
         total=0
@@ -47,15 +64,23 @@ def getGrouped(emos):
         for k in group:
             total=total+k[2]
             count=count+1
-        yield key, float(total)/float(count)
+        #yield key, float(total)/float(count)
+        new_list.append(key)
+        yield key, float(total)/float(num_words)
 
 def getEmotionsForCorpus(root, pattern):
     downloadLexicons()
-
+    global new_list
     files=find_files(root, pattern)
+
     for file in files:
+        del new_list[:]
         emos=getEmotions(read_file(file))
-        yield file, getGrouped(emos)
+        fixed_text = popraviBesedilo(read_file(file))
+        num_words = fixed_text.count(' ')
+        #yield file, getGrouped(emos, num_words)        
+        yield file, getGrouped(emos, num_words), new_list
+
 
 """
 for result in getEmotionsForCorpus('.','*.txt'):
