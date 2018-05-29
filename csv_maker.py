@@ -11,14 +11,14 @@ def joinFiles(fileName1, fileName2, outputFilename):
 
     df = pd.DataFrame(a)
     rowsFile1 = len(df.index)
-    listFile1 = ["Elicitor"] * rowsFile1
+    listFile1 = ["False"] * rowsFile1
 
     df2 = pd.DataFrame(b)
     rowsFile2 = len(df2.index)
-    listFile2 = ["Completer"] * rowsFile2
+    listFile2 = ["True"] * rowsFile2
 
-    df['e/c'] = listFile1
-    df2['e/c'] = listFile2
+    df['Authentic'] = listFile1
+    df2['Authentic'] = listFile2
     new = a.merge(b, how='outer')
 
     #print(new)

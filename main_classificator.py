@@ -267,8 +267,8 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
             arr_2[arr_index] += float(emo[1])
 
 
-    cvs_mean_pos.append(["Flesch score", flesch_completers, flesch_elicitors])
-    cvs_mean_pos.append(["Flesch-Kincaid grade", kincaid_completers, kincaid_elicitors])
+    cvs_mean_pos.append(["Flesch", flesch_completers, flesch_elicitors])
+    cvs_mean_pos.append(["Kincaid", kincaid_completers, kincaid_elicitors])
 
     for key in statistics_elicitors:
         cvs_mean_pos.append([key, statistics_completers[key], statistics_elicitors[key]])
@@ -276,10 +276,10 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
     meanWordsCompleters, meanSignsCompleters, meanCharsCompleters, meanSentencesCompleters = averageStat(readibility_completers_folder)
     meanWordsElicitors, meanSignsElicitors, meanCharsElicitors, meanSentencesElicitors = averageStat(readibility_elicitors_folder)
 
-    cvs_mean_pos.append(["Words average", meanWordsCompleters, meanWordsElicitors])
-    cvs_mean_pos.append(["Signs average", meanSignsCompleters, meanSignsElicitors])
-    cvs_mean_pos.append(["Chars average", meanCharsCompleters, meanCharsElicitors])
-    cvs_mean_pos.append(["Sentences average", meanSentencesCompleters, meanSentencesElicitors])
+    cvs_mean_pos.append(["Num_words", meanWordsCompleters, meanWordsElicitors])
+    cvs_mean_pos.append(["Num_signs", meanSignsCompleters, meanSignsElicitors])
+    cvs_mean_pos.append(["Num_chars", meanCharsCompleters, meanCharsElicitors])
+    cvs_mean_pos.append(["Num_sentence", meanSentencesCompleters, meanSentencesElicitors])
 
     ### normalization emotions
     len_uniqe = len(unique_emotions)
@@ -328,12 +328,6 @@ if __name__ == "__main__":
     learning_completers_pp = "./suicide-notes-database/completers-pp/"
     learning_elicitors_pp = "./suicide-notes-database/elicitors-pp/"
 
-
-    tester_completers = "./suicide-notes-database/TESTER/C/"
-    tester_elicitors = "./suicide-notes-database/TESTER/E/" 
-    tester_completers_pp = "./suicide-notes-database/TESTER/C-pp/"
-    tester_elicitors_pp = "./suicide-notes-database/TESTER/E-pp/"
-
     uniqueEmotions = [u'ambiguous-hope', u'love', u'distress', u'earnestness', u'coolness', u'closeness', u'gladness', u'satisfaction', u'shame', u'comfortableness', u'fulfillment', u'anger', u'eagerness', u'liking', u'stir', u'hate', u'happiness', u'ambiguous-expectation', u'confidence', u'devotion', u'umbrage', u'thing', u'positive-concern', u'peace', u'indifference', u'favor', u'fury', u'stupefaction', u'tranquillity', u'easiness', u'tumult', u'covetousness', u'panic', u'shamefacedness', u'negative-fear', u'forlornness', u'negative-concern', u'compassion', u'confusion', u'horror', u'regard', u'fearlessness', u'depression', u'lost-sorrow', u'embarrassment', u'bang', u'reverence', u'humility', u'huffiness', u'fondness', u'nausea', u'elation', u'regret-sorrow', u'forgiveness', u'jitteriness', u'grief', u'benevolence', u'sadness', u'defeatism', u'calmness', u'triumph', u'misery', u'security', u'scare', u'affection']
     print(uniqueEmotions)
 
@@ -356,20 +350,14 @@ if __name__ == "__main__":
         learning_completers, learning_elicitors, uniqueEmotions)
     
     
-    """
+    
     singleFileStatisticsCSV(learning_completers_pp, learning_elicitors_pp,
         "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
         "ml-database/learning_set_completers.csv", "ml-database/learning_set_elicitors.csv",
         learning_completers, learning_elicitors, uniqueEmotions)
 
-    """
     
-    """
-    singleFileStatisticsCSV(tester_completers_pp, tester_elicitors_pp,
-        "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
-        "ml-database/tester_set_completers.csv", "ml-database/tester_set_elicitors.csv",
-        tester_completers, tester_elicitors, uniqueEmotions)
-    """
+
     
     
 
