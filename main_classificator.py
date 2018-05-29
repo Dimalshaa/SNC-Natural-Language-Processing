@@ -221,7 +221,7 @@ def singleFileStatisticsCSV(completers_folder_pp, elicitors_folder_pp, statistic
 saves CVS file of means for completers and elicitors
 """
 def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicitors_folder, pos_folder_path, statistics_folder_path, 
-    paragraph_tag_name, readibility_completers_folder, readibility_elicitors_folder):
+    paragraph_tag_name, readibility_completers_folder, readibility_elicitors_folder, unique_emotions):
     
     csv_attributes = ["Attribute", "Completers Mean (SD)", "Elicitors Mean (SD)"]
     #cvs_mean_pos = [[key , completer_mean, elicitor_mean], ...]
@@ -252,6 +252,21 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
     ### Flesch-ova metoda in metoda Flesch-Kincaid -> ELICITORS
     flesch_elicitors, kincaid_elicitors = fleschMediana(readibility_elicitors_folder)
 
+    ### EMOTIONS COMPLETERS
+    arr = array('f', [0]*len(unique_emotions))
+    for result in getEmotionsForCorpus('./suicide-notes-database/completers-pp/', '*.txt'):
+        for emo in result[1]:
+            arr_index = int(unique_emotions.index(str(emo[0]))) 
+            arr[arr_index] += float(emo[1])
+
+    ### EMOTIONS ELICITORS
+    arr_2 = array('f', [0]*len(unique_emotions))
+    for result in getEmotionsForCorpus('./suicide-notes-database/elicitors-pp/', '*.txt'):
+        for emo in result[1]:
+            arr_index = int(unique_emotions.index(str(emo[0]))) 
+            arr_2[arr_index] += float(emo[1])
+
+
     cvs_mean_pos.append(["Flesch score", flesch_completers, flesch_elicitors])
     cvs_mean_pos.append(["Flesch-Kincaid grade", kincaid_completers, kincaid_elicitors])
 
@@ -265,6 +280,13 @@ def saveMeanStatisticsCSV(output_csv_filename, pos_completers_folder, pos_elicit
     cvs_mean_pos.append(["Signs average", meanSignsCompleters, meanSignsElicitors])
     cvs_mean_pos.append(["Chars average", meanCharsCompleters, meanCharsElicitors])
     cvs_mean_pos.append(["Sentences average", meanSentencesCompleters, meanSentencesElicitors])
+
+    ### normalization emotions
+    len_uniqe = len(unique_emotions)
+    for i in range(0, len_uniqe):
+        arr[i] = arr[i]/len_uniqe
+        arr_2[i] = arr_2[i]/len_uniqe
+        cvs_mean_pos.append([unique_emotions[i], arr[i], arr_2[i]])    
 
     with open(output_csv_filename, 'wb') as fs:
         wr = csv.writer(fs, quoting=csv.QUOTE_NONE) #, delimiter='|', quotechar='',escapechar='\\')
@@ -307,21 +329,32 @@ if __name__ == "__main__":
     learning_elicitors_pp = "./suicide-notes-database/elicitors-pp/"
 
 
-    tester_completers = "./suicide-notes-database/TESTER/C-pp/"
-    tester_elicitors = "./suicide-notes-database/TESTER/E-pp/" 
-    tester_completers_pp = "./suicide-notes-database/TESTER/C/"
-    tester_elicitors_pp = "./suicide-notes-database/TESTER/E/"
+    tester_completers = "./suicide-notes-database/TESTER/C/"
+    tester_elicitors = "./suicide-notes-database/TESTER/E/" 
+    tester_completers_pp = "./suicide-notes-database/TESTER/C-pp/"
+    tester_elicitors_pp = "./suicide-notes-database/TESTER/E-pp/"
 
-    listEmotions = []
-    listEmotions = getAllEmotions(learning_elicitors, learning_completers)
-    uniqueEmotions = createStacionarDictionary(listEmotions)
+    uniqueEmotions = [u'ambiguous-hope', u'love', u'distress', u'earnestness', u'coolness', u'closeness', u'gladness', u'satisfaction', u'shame', u'comfortableness', u'fulfillment', u'anger', u'eagerness', u'liking', u'stir', u'hate', u'happiness', u'ambiguous-expectation', u'confidence', u'devotion', u'umbrage', u'thing', u'positive-concern', u'peace', u'indifference', u'favor', u'fury', u'stupefaction', u'tranquillity', u'easiness', u'tumult', u'covetousness', u'panic', u'shamefacedness', u'negative-fear', u'forlornness', u'negative-concern', u'compassion', u'confusion', u'horror', u'regard', u'fearlessness', u'depression', u'lost-sorrow', u'embarrassment', u'bang', u'reverence', u'humility', u'huffiness', u'fondness', u'nausea', u'elation', u'regret-sorrow', u'forgiveness', u'jitteriness', u'grief', u'benevolence', u'sadness', u'defeatism', u'calmness', u'triumph', u'misery', u'security', u'scare', u'affection']
     print(uniqueEmotions)
-     
+
     """
+
+    listEmotionsLearning = []
+    listEmotionsLearning = getAllEmotions(learning_elicitors_pp, learning_completers_pp)
+
+    listEmotionsTesters = []
+    listEmotionsTesters = getAllEmotions(tester_elicitors_pp, tester_completers_pp)
+
+    listAll = listEmotionsLearning + listEmotionsTesters
+    uniqueEmotions = createStacionarDictionary(listAll)
+    print(uniqueEmotions)
+    """
+     
+    
     saveMeanStatisticsCSV("ml-database/means.csv", learning_completers_pp, learning_elicitors_pp,
         "./suicide-notes-database/parts_of_speech/", "./suicide-notes-database/parts_of_speech_statistics/", ".//post",
-        learning_completers, learning_elicitors)
-    """
+        learning_completers, learning_elicitors, uniqueEmotions)
+    
     
     """
     singleFileStatisticsCSV(learning_completers_pp, learning_elicitors_pp,
@@ -331,11 +364,12 @@ if __name__ == "__main__":
 
     """
     
-    singleFileStatisticsCSV(tester_completers, tester_elicitors,
+    """
+    singleFileStatisticsCSV(tester_completers_pp, tester_elicitors_pp,
         "./suicide-notes-database/parts_of_speech_statistics/", "./suicide-notes-database/parts_of_speech/",
         "ml-database/tester_set_completers.csv", "ml-database/tester_set_elicitors.csv",
-        tester_completers_pp, tester_elicitors_pp)
-    
+        tester_completers, tester_elicitors, uniqueEmotions)
+    """
     
     
 

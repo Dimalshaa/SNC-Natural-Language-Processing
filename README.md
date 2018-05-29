@@ -316,3 +316,26 @@ Izhod:
 Array generator objektov (evalvacija se zgodi komaj ob dostopanju do vrednosti - nepomembno za končnega uporabnika)
 
 `(file_path:str, flesch_readability_ease_score:num[0-100], flesch_kincaid_grade_level:num[0-10])`
+
+### CSV Maker
+
+Združi dve vhodni csv datoteki v eno izhodno.
+**Program išče datoteke na pathu:**
+
+./ml-database 
+
+Primer uporabe:
+
+```python
+    fileToJoin1 = "learning_set_elicitors.csv"
+    fileToJoin2 = "learning_set_completers.csv"
+    outputFile = "learning_set.csv"
+
+    joinFiles(fileToJoin1, fileToJoin2 , outputFile)
+```
+
+Zgornji primer bi pomeni, da hočemo združiti datoteki learning_set_elicitors.csv in learning_set_completers.csv, ki sta na pathu ./ml-database
+(./ml-database/learning_set_elicitors.csv, ..) v izhodno datoteko learning_set.csv.
+
+filetoJoin1 in fileToJoin2 sta vhodni datoteki. outputFile je izhodna datoteka, katero hočemo generirati.
+joinFiles(vhodna_dat1, vhodna_dat2, izhodna_dat) je klic funkcije, ki opravi združitev. 
