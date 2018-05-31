@@ -34,7 +34,7 @@ A = []
 
 for i in range(0,10000):
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20) # Split up 20% of the data in to the test set and 80% for training
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05) # Split up 20% of the data in to the test set and 80% for training
 
 
     # Training and Making Predictions
@@ -46,7 +46,7 @@ for i in range(0,10000):
 
     # Evaluating the Algorithm
     m = precision_recall_fscore_support(y_test, y_pred, average=None)
-    a = precision_recall_fscore_support(y_test, y_pred, average='weighted')
+    a = precision_recall_fscore_support(y_test, y_pred, average='macro')
 
     if i == 0:
         for index in range(0, len(m)):
